@@ -33,14 +33,12 @@ def send_telegram_message(text):
 
 
 def check_schedule():
-  # Создаем скрапер, который обходит защиту Cloudflare
   scraper = cloudscraper.create_scraper()
 
   try:
     response = scraper.post(API_URL, data=PAYLOAD, timeout=20)
     print(f"Статус ответа: {response.status_code}")
 
-    # Пытаемся получить JSON
     current_data = response.json()
   except Exception as e:
     print(f"Ошибка: {e}")
@@ -62,7 +60,7 @@ def check_schedule():
     )
     send_telegram_message(msg)
     with open(STATE_FILE, "w", encoding="utf-8") as f:
-      json.dump(current_data, f, ensure_ascii=False, indent+4 if 'indent+4' in globals() else 4) # исправлено на indent=4
+      json.dump(current_data, f, ensure_ascii=False, indent=4)
     print("График изменился, уведомление отправлено!")
   else:
     print("Изменений нет.")
